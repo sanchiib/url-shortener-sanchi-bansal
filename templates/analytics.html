@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics — URL Shortener</title>
+  <style>
+    :root {
+      --pastel-blue: #cfe4fb;
+      --pastel-blue-dark: #a9cdf5;
+      --accent-blue: #5b9bf0;
+      --accent-blue-dark: #4585dd;
+      --text: #2b3a4a;
+      --text-soft: #6b7c8f;
+      --white: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      color: var(--text);
+      background: linear-gradient(160deg, var(--pastel-blue) 0%, var(--white) 55%, var(--pastel-blue) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 640px;
+      text-align: center;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 36px 32px;
+      box-shadow: 0 10px 30px rgba(91, 155, 240, 0.18);
+      border: 1px solid var(--pastel-blue-dark);
+    }
+
+    a.nav {
+      display: inline-block;
+      margin-bottom: 18px;
+      font-size: 0.9rem;
+      color: var(--accent-blue-dark);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    a.nav:hover { text-decoration: underline; }
+
+    h1 {
+      font-size: 1.5rem;
+      margin: 0 0 24px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--pastel-blue);
+    }
+
+    th {
+      color: var(--text-soft);
+      font-weight: 600;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    td.url {
+      max-width: 240px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--text-soft);
+    }
+
+    td a {
+      color: var(--accent-blue-dark);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    td a:hover { text-decoration: underline; }
+
+    .clicks {
+      font-weight: 700;
+      color: var(--accent-blue-dark);
+      background: var(--pastel-blue);
+      border-radius: 8px;
+      padding: 3px 10px;
+      display: inline-block;
+    }
+
+    .empty {
+      color: var(--text-soft);
+      margin-top: 10px;
+    }
+
+    .expired {
+      color: #b3413c;
+      font-size: 0.78rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="card">
+      <a class="nav" href="/">← Back</a>
+      <h1>Top 5 most-clicked links</h1>
+
+      {% if links %}
+      <table>
+        <thead>
+          <tr><th>Code</th><th>Original URL</th><th>Clicks</th><th>Created</th></tr>
+        </thead>
+        <tbody>
+          {% for link in links %}
+          <tr>
+            <td><a href="{{ link.short_url }}">{{ link.code }}</a></td>
+            <td class="url" title="{{ link.url }}">{{ link.url }}</td>
+            <td><span class="clicks">{{ link.clicks }}</span></td>
+            <td>{{ link.created_at }}{% if link.expired %} <span class="expired">(expired)</span>{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="empty">No links have been shortened yet.</p>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>
