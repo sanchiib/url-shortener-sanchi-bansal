@@ -38,6 +38,7 @@
       font-family: var(--font-body);
       color: var(--ink);
       background: var(--grass);
+      overflow-x: hidden;
     }
 
     a { color: inherit; }
@@ -47,7 +48,7 @@
     .hero {
       position: relative;
       min-height: 100svh;
-      overflow: visible;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -108,11 +109,22 @@
       white-space: nowrap;
     }
 
+    /* ---- stage for url bar and character ---- */
+    .hero-stage {
+      position: relative;
+      z-index: 3;
+      width: min(78vw, 900px);
+      margin-top: -15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     /* ---- decorative URL bar (visual only — the real input lives in the card below) ---- */
     .url-bar-decor {
       position: relative;
       z-index: 3;
-      width: min(78vw, 900px);
+      width: 100%;
       height: clamp(56px, 8vw, 92px);
       background: var(--white);
       border-radius: 999px;
@@ -122,7 +134,13 @@
       gap: 14px;
       padding: 0 clamp(20px, 3vw, 40px);
       opacity: 0.96;
-      margin-top: -15px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.16s ease, box-shadow 0.16s ease;
+    }
+    .url-bar-decor:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 36px rgba(46, 42, 34, 0.22);
     }
     .url-bar-decor .url-text {
       font-family: 'Nunito', monospace;
@@ -213,17 +231,17 @@
       border: none;
       background: none;
       object-fit: contain;
-      object-position: center bottom;
-      width: clamp(800px, 60vw, 1600px);
-      height: clamp(3000px, 100vh, 5500px);
-      z-index: 100;
       position: absolute;
-      bottom: auto;
-      top: clamp(8%, 20vw, 25%);
-      left: 50%;
-      transform: translateX(-10%);
-      display: block;
+      z-index: 4;
       pointer-events: none;
+      display: block;
+      max-height: none;
+      aspect-ratio: auto;
+      width: clamp(540px, 48vw, 760px);
+      height: auto;
+      right: clamp(-170px, -13vw, -80px);
+      top: 50%;
+      transform: translateY(-40%);
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -458,28 +476,110 @@
 
     /* ============ RESPONSIVE ============ */
 
-    @media (max-width: 780px) {
-      .img-placeholder { width: min(38vw, 260px); opacity: 0.9; }
-      .url-bar-decor { width: 88vw; }
-    }
-
     @media (min-width: 1200px) {
       .wordmark { font-size: clamp(8rem, 12vw, 14rem); }
-      .url-bar-decor { width: min(70vw, 1000px); }
+      .hero-stage { width: min(72vw, 1050px); }
+      img.img-placeholder {
+        width: clamp(620px, 48vw, 820px);
+        right: clamp(-200px, -14vw, -120px);
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .hero-stage { width: min(84vw, 760px); }
+      img.img-placeholder {
+        width: clamp(380px, 44vw, 480px);
+        right: clamp(-100px, -11vw, -50px);
+        transform: translateY(-40%);
+      }
+      .hero-buttons {
+        margin-top: 36px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-stage { width: min(88vw, 620px); }
+      .wordmark { font-size: clamp(4rem, 14vw, 6.5rem); }
+      img.img-placeholder {
+        width: clamp(250px, 40vw, 320px);
+        right: clamp(-50px, -7vw, -25px);
+        transform: translateY(-40%);
+      }
+      .hero-buttons {
+        margin-top: 38px;
+      }
     }
 
     @media (max-width: 560px) {
-      .hero { min-height: 92svh; }
-      .img-placeholder { display: none; }
-      .url-bar-decor { width: 88vw; }
-      .hero-buttons { flex-direction: column; width: 220px; }
-      .btn-solid, .btn-ghost { width: 100%; text-align: center; }
-      .card { padding: 30px 22px; border-radius: 22px; }
-      .shortener-section { padding: 52px 16px 0; }
+      .hero { min-height: 100svh; }
+      .hero-content {
+        padding: 0 16px;
+        margin-top: -3vh;
+      }
+      .brand { margin-bottom: 2px; }
+      .wordmark {
+        font-size: clamp(3.2rem, 15vw, 4.6rem);
+        line-height: 1.05;
+      }
+      .hero-stage {
+        width: min(92vw, 400px);
+        margin-top: 6px;
+      }
+      .url-bar-decor {
+        height: 56px;
+        padding: 0 clamp(14px, 4vw, 20px);
+        gap: 10px;
+      }
+      .url-bar-decor .url-text {
+        font-size: clamp(0.95rem, 3.8vw, 1.15rem);
+      }
+      img.img-placeholder {
+        width: clamp(145px, 42vw, 185px);
+        right: -8px;
+        top: 50%;
+        transform: translateY(-44%);
+      }
+      .hero-buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 12px;
+        width: auto;
+        max-width: 100%;
+        margin-top: clamp(54px, 14vw, 68px);
+      }
+      .btn-solid, .btn-ghost {
+        padding: 12px 20px;
+        font-size: 0.95rem;
+        border-radius: 12px;
+        white-space: nowrap;
+      }
+      .card { padding: 28px 20px; border-radius: 22px; }
+      .shortener-section { padding: 48px 16px 0; }
     }
 
     @media (max-width: 420px) {
       .row { flex-direction: column; }
+      input { font-size: 16px; }
+      .card { padding: 26px 16px; }
+    }
+
+    @media (max-width: 370px) {
+      .hero-stage { width: 94vw; }
+      .url-bar-decor { height: 52px; padding: 0 12px; }
+      .url-bar-decor .url-text { font-size: 0.88rem; }
+      img.img-placeholder {
+        width: 140px;
+        right: -6px;
+      }
+      .hero-buttons {
+        gap: 8px;
+        margin-top: 50px;
+      }
+      .btn-solid, .btn-ghost {
+        padding: 10px 14px;
+        font-size: 0.86rem;
+      }
     }
   </style>
 </head>
@@ -543,9 +643,12 @@
         <h1 class="wordmark">SNIPLY</h1>
       </div>
 
-      <div class="url-bar-decor" aria-hidden="true">
-        <span class="url-text">http://www.</span>
-        <span class="url-line"></span>
+      <div class="hero-stage">
+        <a class="url-bar-decor" href="#shortener" aria-label="Go to link shortener">
+          <span class="url-text">http://www.</span>
+          <span class="url-line"></span>
+        </a>
+        <img class="img-placeholder" src="{{ url_for('static', filename='hero-character.png') }}" alt="">
       </div>
 
       <div class="hero-buttons">
@@ -553,8 +656,6 @@
         <a class="btn-ghost" href="/analytics">View Insights</a>
       </div>
     </div>
-
-      <img class="img-placeholder" src="{{ url_for('static', filename='hero-character.png') }}" alt="">
   </section>
 
   <!-- ============ SHORTENER SECTION ============ -->
@@ -566,7 +667,7 @@
       </div>
 
       <div class="card">
-        <form id="shorten-form">
+        <form id="shorten-form" novalidate>
           <input type="url" id="url" placeholder="https://example.com/some/long/path" required>
           <div class="row">
             <input type="text" id="alias" placeholder="Custom alias (optional)">
@@ -650,13 +751,30 @@
       if (e.target === overlay) closeModal();
     });
 
+    const urlBarDecor = document.querySelector(".url-bar-decor");
+    if (urlBarDecor) {
+      urlBarDecor.addEventListener("click", () => {
+        const input = document.getElementById("url");
+        if (input) {
+          setTimeout(() => input.focus(), 350);
+        }
+      });
+    }
+
     copyBtn.addEventListener("click", async () => {
       const text = shortUrlLink.href;
       try {
-        await navigator.clipboard.writeText(text);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          throw new Error("Clipboard API unavailable");
+        }
       } catch (err) {
         const temp = document.createElement("textarea");
         temp.value = text;
+        temp.setAttribute("readonly", "");
+        temp.style.position = "fixed";
+        temp.style.opacity = "0";
         document.body.appendChild(temp);
         temp.select();
         document.execCommand("copy");
@@ -664,19 +782,38 @@
       }
       copyBtn.textContent = "Copied!";
       copyBtn.classList.add("copied");
+      setTimeout(() => {
+        copyBtn.textContent = "Copy";
+        copyBtn.classList.remove("copied");
+      }, 2500);
     });
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       hideError();
 
-      const url = document.getElementById("url").value.trim();
+      let url = document.getElementById("url").value.trim();
       const alias = document.getElementById("alias").value.trim();
       const ttl = document.getElementById("ttl").value.trim();
 
+      if (!url) {
+        showError("Please enter a URL.");
+        return;
+      }
+
+      // If user provided a domain without protocol, automatically default to https://
+      if (!/^https?:\/\//i.test(url)) {
+        url = "https://" + url;
+      }
+
       const body = { url };
       if (alias) body.alias = alias;
-      if (ttl) body.ttl_seconds = parseInt(ttl, 10);
+      if (ttl) {
+        const parsedTtl = parseInt(ttl, 10);
+        if (!isNaN(parsedTtl)) {
+          body.ttl_seconds = parsedTtl;
+        }
+      }
 
       submitBtn.disabled = true;
       submitBtn.textContent = "Shortening...";
@@ -687,10 +824,15 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
         });
-        const data = await res.json();
+        let data = {};
+        try {
+          data = await res.json();
+        } catch (_) {
+          data = {};
+        }
 
         if (!res.ok) {
-          showError(data.error || "Something went wrong.");
+          showError(data.error || `Error ${res.status}: ${res.statusText || "Something went wrong."}`);
           return;
         }
 

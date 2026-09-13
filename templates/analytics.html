@@ -110,6 +110,20 @@
       color: #b3413c;
       font-size: 0.78rem;
     }
+
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    @media (max-width: 560px) {
+      body { padding: 24px 12px; }
+      .card { padding: 24px 16px; border-radius: 16px; }
+      h1 { font-size: 1.25rem; margin-bottom: 18px; }
+      th, td { padding: 10px 8px; font-size: 0.85rem; }
+      td.url { max-width: 140px; }
+    }
   </style>
 </head>
 <body>
@@ -119,21 +133,23 @@
       <h1>Top 5 most-clicked links</h1>
 
       {% if links %}
-      <table>
-        <thead>
-          <tr><th>Code</th><th>Original URL</th><th>Clicks</th><th>Created</th></tr>
-        </thead>
-        <tbody>
-          {% for link in links %}
-          <tr>
-            <td><a href="{{ link.short_url }}">{{ link.code }}</a></td>
-            <td class="url" title="{{ link.url }}">{{ link.url }}</td>
-            <td><span class="clicks">{{ link.clicks }}</span></td>
-            <td>{{ link.created_at }}{% if link.expired %} <span class="expired">(expired)</span>{% endif %}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr><th>Code</th><th>Original URL</th><th>Clicks</th><th>Created</th></tr>
+          </thead>
+          <tbody>
+            {% for link in links %}
+            <tr>
+              <td><a href="{{ link.short_url }}">{{ link.code }}</a></td>
+              <td class="url" title="{{ link.url }}">{{ link.url }}</td>
+              <td><span class="clicks">{{ link.clicks }}</span></td>
+              <td>{{ link.created_at }}{% if link.expired %} <span class="expired">(expired)</span>{% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
       {% else %}
       <p class="empty">No links have been shortened yet.</p>
       {% endif %}
